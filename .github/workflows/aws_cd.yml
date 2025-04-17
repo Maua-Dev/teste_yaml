@@ -44,6 +44,7 @@ jobs:
               run: |
                   echo "STAGE=${{ github.ref_name }}" >> $GITHUB_ENV
                   echo "STACK_NAME=PortalInternoActionStack${{ github.ref_name }}" >> $GITHUB_ENV
+                  echo "PROJECT_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
 
             - uses: actions/setup-python@v4
               with:
