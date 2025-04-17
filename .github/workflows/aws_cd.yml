@@ -56,19 +56,6 @@ jobs:
                   cd iac
                   pip install -r requirements.txt
 
-            - name: Resolve CDKToolkit DELETE_FAILED State
-              run: |
-                cd iac
-                STACK_STATUS=$(aws cloudformation describe-stacks --stack-name CDKToolkit --region ${{ vars.AWS_REGION }} --query 'Stacks[0].StackStatus' --output text 2>/dev/null || echo "NOT_FOUND")
-                if [[ "$STACK_STATUS" == "DELETE_FAILED" ]]; then
-                  echo "Detected DELETE_FAILED state for CDKToolkit stack. Attempting to resolve..."
-                  echo "Deleting CDKToolkit stack..."
-                  aws cloudformation delete-stack --stack-name CDKToolkit --region ${{ vars.AWS_REGION }}
-                  aws cloudformation wait stack-delete-complete --stack-name CDKToolkit --region ${{ vars.AWS_REGION }} || echo "Stack deletion failed; may require manual intervention"
-                else
-                  echo "CDKToolkit stack is not in DELETE_FAILED state. Proceeding..."
-                fi
-
             - name: Bootstrap Check
               run: |
                   cd iac
