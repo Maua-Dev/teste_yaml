@@ -56,10 +56,21 @@ jobs:
                   cd iac
                   pip install -r requirements.txt
 
+            - name: Identifying bootstrap problem bfr
+              run: |
+                  aws cloudformation describe-stacks --stack-name CDKToolkit --region us-east-1 --profile ${{ env.AWS_ACCOUNT_ID }}
+                  aws cloudformation describe-stack-events --stack-name CDKToolkit --region us-east-1 --profile ${{ env.AWS_ACCOUNT_ID }}
+
             - name: Bootstrap Check
               run: |
                   cd iac
                   cdk bootstrap aws://${{ env.AWS_ACCOUNT_ID }}/${{ vars.AWS_REGION }} 
+
+            - name: Identifying bootstrap problem after
+              run: |
+                  aws cloudformation describe-stacks --stack-name CDKToolkit --region us-east-1 --profile ${{ env.AWS_ACCOUNT_ID }}
+                  aws cloudformation describe-stack-events --stack-name CDKToolkit --region us-east-1 --profile ${{ env.AWS_ACCOUNT_ID }}
+
 
             - name: DeployWithCDK
               run: |
